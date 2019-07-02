@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ScmDtxDO">
+    <resultMap id="resultMap" type="io.seata.samples.dubbo.myproblem.ScmDtxDO">
+        <result column="id" property="id"/>
+        <result column="lock_id" property="lockId"/>
+        <result column="lock_name" jdbcType="VARCHAR" property="lockName"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modify" property="gmtModify"/>
+    </resultMap>
+
+    <sql id="allColumns">
+        id,
+        <include refid="queryColumns" />
+    </sql>
+
+    <sql id="queryColumns">
+        lock_id,
+        lock_name,
+        gmt_create,
+        gmt_modify
+    </sql>
+
+    <insert id="insert" parameterType="io.seata.samples.dubbo.myproblem.ScmDtxDO">
+        insert into scm_dtx
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="lockId != null">
+                lock_id,
+            </if>
+            <if test="lockName != null">
+                lock_name,
+            </if>
+            gmt_create,
+            gmt_modify
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="lockId != null">
+                #{lockId},
+            </if>
+            <if test="lockName != null">
+                #{lockName},
+            </if>
+            now(),
+            now()
+        </trim>
+    </insert>
+</mapper>
